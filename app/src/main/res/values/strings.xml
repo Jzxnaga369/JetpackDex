@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">JetpackDex</string>
+    <string name="a11y_message">Terdapat App Yang Berpotensi Sebagai Malware</string>
+</resources>

@@ -1,0 +1,508 @@
+#-addconfigurationdebugging
+
+-include /lib/dexguard-release-aggressive.pro
+-include /lib/dexguard-rasp.pro
+
+-dontoptimize
+#-appattestation
+
+################################################## Malware ##################################################
+#-malwareprotect screenrecording class com.rmldemo.guardsquare.uat.presentation.MainActivity
+-malwareprotect a11y class com.rmldemo.guardsquare.uat.presentation.MainActivity
+-malwarewarnon !a11y
+#-malwaremessage a11y string/a11y_message
+-malwarecallback a11y class com.rmldemo.guardsquare.uat.presentation.MainActivity {
+    public static void myA11YCallback(long);
+}
+#-malwareprotect overlays
+#-malwareprotect activityinjection
+
+
+###################################### RASP ######################################
+-raspchecks emulator, debug, virtualenvironment entrypoint
+-raspchecks hardware
+-raspcontinueon hardware
+
+#-raspchecks hardware checkpoint class com.rmldemo.guardsquare.uat.presentation.login.LoginViewModel {
+#    void onEvent(com.rmldemo.guardsquare.uat.presentation.login.LoginEvent);
+#}
+
+-raspchecks hook,certificatetamper,root,virtualenvironment checkpoint class com.rmldemo.guardsquare.uat.presentation.splash.SplashViewModel  {
+    void onEvent(com.rmldemo.guardsquare.uat.presentation.splash.SplashEvent);
+}
+
+-raspchecks hook,certificatetamper,root,virtualenvironment checkpoint class com.rmldemo.guardsquare.uat.presentation.login.LoginViewModel {
+    void onEvent(com.rmldemo.guardsquare.uat.presentation.login.LoginEvent);
+}
+
+-raspchecks hook,debug checkpoint class com.rmldemo.guardsquare.uat.presentation.register.RegisterViewModel {
+    void onEvent(com.rmldemo.guardsquare.uat.presentation.register.RegisterEvent);
+}
+
+-raspchecks hook,certificatetamper,debug,root checkpoint class com.rmldemo.guardsquare.uat.presentation.home.HomeViewModel {
+    void onEvent(com.rmldemo.guardsquare.uat.presentation.home.HomeEvent);
+}
+
+-raspchecks hook,debug,certificatetamper,virtualenvironment checkpoint class com.rmldemo.guardsquare.uat.presentation.profile.ProfileViewModel {
+    void onEvent(com.rmldemo.guardsquare.uat.presentation.profile.ProfileEvent);
+}
+
+-raspchecks hook,debug checkpoint class com.rmldemo.guardsquare.uat.presentation.topup.TopUpViewModel {
+    void onEvent(com.rmldemo.guardsquare.uat.presentation.topup.TopUpEvent);
+}
+
+-raspchecks hook,debug,certificatetamper,virtualenvironment checkpoint class com.rmldemo.guardsquare.uat.presentation.payment.PaymentViewModel {
+    void onEvent(com.rmldemo.guardsquare.uat.presentation.payment.PaymentEvent);
+}
+
+-raspchecks hook,debug checkpoint class com.rmldemo.guardsquare.uat.presentation.transfer.TransferViewModel {
+    void onEvent(com.rmldemo.guardsquare.uat.presentation.transfer.TransferEvent);
+}
+
+-raspchecks hook,debug,certificatetamper,virtualenvironment checkpoint class com.rmldemo.guardsquare.uat.presentation.history.HistoryViewModel {
+    void onEvent(com.rmldemo.guardsquare.uat.presentation.history.HistoryEvent);
+}
+
+-raspchecks root,hook,debug checkpoint class okhttp3.CertificatePinner {
+    !static *** !<init>(...);
+}
+
+-raspclassfilter class com.rmldemo.guardsquare.uat.**
+-raspdenylist class com.rmldemo.guardsquare.uat.MyApp {
+    void onCreate();
+}
+
+
+###################################### RASP Callback ######################################
+#-raspcallback hardware class com.rmldemo.guardsquare.uat.MyApp {
+#    public static void myHardwareCallback(android.content.Context, long);
+#}
+
+###################################### Reflction ######################################
+-accessthroughreflection class javax.crypto.Cipher {
+    byte[] doFinal(byte[]);
+}
+
+
+###################################### Code Obfuscation ######################################
+-obfuscatecode class com.rmldemo.guardsquare.**
+
+
+###################################### Code Encryption ######################################
+-encryptclasses class com.google.firestore.v1.TargetChange
+-encryptclasses class com.google.firestore.v1.DocumentChange
+-encryptclasses class com.google.firestore.v1.Document
+-encryptclasses class com.google.firestore.v1.ExistenceFilter
+-encryptclasses class com.google.firestore.v1.BloomFilter
+-encryptclasses class com.google.firestore.v1.BitSequence
+-encryptclasses class com.google.firestore.v1.WriteResult
+
+
+###################################### String Encryption ######################################
+-encryptstrings class com.rmldemo.guardsquare.uat.utils.Constans { *; }
+-encryptstrings "https"
+
+
+###################################### Native Library Encryption ######################################
+-encryptnativelibraries lib/*/libsecret.so
+
+
+###################################### Asset Encryption ######################################
+-encryptassetfiles assets/**
+
+
+###################################### String Encryption ######################################
+-encryptresource string/**
+-encryptresources string/google_api_key
+-encryptresources string/google_crash_reporting_api_key
+
+
+###################################### Resource File Encryption ######################################
+#-encryptresourcefiles res/**
+
+
+###################################### Metadata Encryption ######################################
+-encryptmetadata com.google.android.geo.API_KEY
+
+
+###################################### Disable Log ######################################
+-assumenosideeffects class android.util.Log {
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+}
+
+###################################### Code Virtualization ######################################
+-virtualizecode class com.google.firestore.v1.TargetChange
+-virtualizecode class com.google.firestore.v1.DocumentChange
+-virtualizecode class com.google.firestore.v1.Document
+-virtualizecode class com.google.firestore.v1.ExistenceFilter
+-virtualizecode class com.google.firestore.v1.BloomFilter
+-virtualizecode class com.google.firestore.v1.BitSequence
+-virtualizecode class com.google.firestore.v1.WriteResult
+
+
+###################################### ThreatCast ######################################
+-threatcastapikey eyJ2ZXJzaW9uIjoxLCJrZXkiOiI4ZDZhY2JmNjE0Mjc1ZDIzYjliZjY5OTgxZmI5NTQ0ODY5YmE4MDc0NzA5OTliN2MiLCJmbGFncyI6eyJoZWFydGJlYXRzIjp0cnVlfSwiZW5kcG9pbnQiOiJyYWRpdHlhbXVsaWFsZXN0YXJpLnRocmVhdGNhc3QuZ3VhcmRzcXVhcmUuY29tIiwiaW50ZWdyYXRpb25LZXkiOiIwODU5MmY5YTZjZjVmMGVkODI3ZTI2YTJlNzYzMGMwYTU0MzE1MzQxMTA3OTg0NmE4NjIyYWQxOWQ3YjRlYWUyIiwic2VjcmV0IjoiN2MxZDEwYTI2MTAwZDI4NDZjOWUyOGNhODU4MDBhMDhkNmY2ZTllMTkwNjMzNGU5ZDI2MWNiYzM2ZDdkNjFlNiJ9
+#-threatcastapikey eyJ2ZXJzaW9uIjoyLCJrZXkiOiJmYWNiZWM2OTQzNTY0ZmQzYTdiZGQ3MjM0ZTJmNDNmOWI0YzVlY2VmOTkyNWQ5ZDYiLCJmbGFncyI6eyJoZWFydGJlYXRzIjp0cnVlfSwiZW5kcG9pbnQiOiJjODFmNmFlZTNjNzc0NDkxLnRocmVhdGNhc3QuZ3VhcmRzcXVhcmUuY29tIiwiaW50ZWdyYXRpb25LZXkiOiIwYmM0YmZjYzM4ZTcwNTg3OWQxYjQ1ZDk2MmE2MmVmMjJmYjYyOWJjZDI5M2MwODkzZDY4ZDFmMGQ1NzcyZmQ2Iiwic2VjcmV0IjoiZWVjMGQzOGRiYWEyOTgyM2IzNDJjOWZiNjIyOTI2YWM0ZjNkNDUzNWRjYjE3NGQ5OGZmMjM2ODNlN2RmYjhlNSIsImF0dGVzdGF0aW9uUHVibGljS2V5IjoiLS0tLS1CRUdJTiBSU0EgUFVCTElDIEtFWS0tLS0tXG5NSUlDSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQWc4QU1JSUNDZ0tDQWdFQXJVR2RTNGxDa3BmUXZsUjA3UmF2XG44WkViTERVdy9vN3ZjYld6c2JWTEVWZFZYSTVXd1dsclFmcFM2R3hXN0tENE4rOXpiNC9oakVTb0M1bDRNbkp0XG5zTC9PcE1hK2VJY3BseXg1cXVFYnlETTRMbzMrKzVCMnBuc0ZYNGR0SXJvNlNiR0Q5cFVkVDNIUCtpSm1DK3p4XG5CUHpxZSsyb2l6S3hZVW9XWHFtR3I3eWhTc1d3cU1CWE5PZHl6NjJtdHlFS3NYdStpaitUaWFNZ0duSTc1aWthXG55aG1pTG5mWWYweTJIOExnVkljSU9mOUJhUFlLS09uQnQyd3RlWTdQMHp5azQxZ0tmejR2dkZsT29nSHphZkMzXG5LMUFvRlFYcDJzeUlOSUR5Zit3bnAyNVZwWVZudmxpZDdxamNyZko5UVlnb3dxYWFiVys4aTg4TFlOdWNIcTFSXG41UHN0VjNIclB2UldJeGJHQjVMdURTbXA5ckIzTWcyMjNVQUovaUVCL3JkN2dCOFRXeHhYSEJTRkJkbTg2TjZqXG5seEF5WWV3QytWT1JBZzY3cWMrYVU3ZlB3NGRsZmY4Zy9vUFlwMXpMVTZ3eFpaRG1rU3dadFFma2RCaWJsQzd3XG4wTXVMYlBNWG5TanU5S0R5WFNJeFMzU1Rta2JuVHVjcnBJMGRWbUh0VkJ2RkFNVmRkd1BObHVXOXVER3VSanBOXG5nakwyaW9LSjR1ODUwVDRVSXpHbk5DY0lDNEVjYWQwejMrT1N5c0JRQTR3c3pDMDNuQ1RySjUrZlRhM3MrQndCXG41aHFqVnRBUzVURTRidlp2Q0NaS2Y1ckJDWk84YzI5endhaDBVb2FmSU5HV3grRVpZSzFtalViOVQwcjBqSmwrXG4zcHlFRWpYN1FtMHpSdFpUbDNzRFBRMENBd0VBQVE9PVxuLS0tLS1FTkQgUlNBIFBVQkxJQyBLRVktLS0tLVxuIiwiYXR0ZXN0YXRpb25FbmRwb2ludCI6ImM4MWY2YWVlM2M3NzQ0OTEuYXR0LnRocmVhdGNhc3QuZ3VhcmRzcXVhcmUuY29tIn0=
+-threatcastappuseridgetter class com.rmldemo.guardsquare.uat.MyApp {
+    public static java.lang.String getAuid();
+}
+
+###################################### AutoConfig ######################################
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.storage.FirebaseStorageKtxRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.firestore.FirebaseFirestoreKtxRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.appcheck.FirebaseAppCheckKtxRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.appcheck.FirebaseAppCheckRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingKtxRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.sessions.FirebaseSessionsRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.crashlytics.FirebaseCrashlyticsKtxRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.storage.StorageRegistrar"
+-keepresourcexmlelements "manifest/application/service/meta-data@name=com.google.firebase.components:com.google.firebase.crashlytics.CrashlyticsRegistrar"
+-keepresourcexmlelements "manifest/application/provider/meta-data@name=androidx.emoji2.text.EmojiCompatInitializer"
+-keepresourcexmlelements "manifest/application/provider/meta-data@name=androidx.lifecycle.ProcessLifecycleInitializer"
+-keepresourcexmlelements "manifest/application/provider/meta-data@name=androidx.profileinstaller.ProfileInstallerInitializer"
+-keepclassmembers class androidx.navigation.compose.BackStackEntryIdViewModel {
+    <init>(...);
+}
+-keepclassmembers class com.rmldemo.guardsquare.uat.data.remote.GetVersionResponse {
+    <fields>;
+}
+-keepclassmembers class com.rmldemo.guardsquare.uat.data.remote.VersionResponse {
+    <fields>;
+}
+-keepresourcexmlelements "manifest/application/meta-data@name=com.google.android.gms.version"
+-keepresources drawable/$wallet__0
+-keepresources drawable/$wallet__1
+-keepresourcexmlelements "manifest/application/service/meta-data@name=backend:com.google.android.datatransport.cct.CctBackendFactory"
+-keepclassmembers class com.rmldemo.guardsquare.uat.data.remote.DeviceLogBody {
+    <fields>;
+}
+-keepclassmembers class com.rmldemo.guardsquare.uat.data.remote.PostDeviceLogResponse {
+    <fields>;
+}
+-keepresourcefiles assets/dexopt/baseline.prof
+-keepresourcefiles assets/dexopt/baseline.profm
+-keepclassmembers class com.rmldemo.guardsquare.uat.data.remote.PromoResponse {
+    <fields>;
+}
+-keep class com.google.android.gms.dynamite.DynamiteModule$DynamiteLoaderClassLoader
+-keepclassmembers class com.google.android.gms.dynamite.DynamiteModule$DynamiteLoaderClassLoader {
+    *** sClassLoader;
+}
+-keep class io.grpc.internal.JndiResourceResolverFactory
+-keep class com.google.firestore.v1.TargetChange
+-keep class com.google.firestore.v1.DocumentChange
+-keep class com.google.firestore.v1.Document
+-keep class com.google.firestore.v1.ExistenceFilter
+-keep class com.google.firestore.v1.BloomFilter
+-keep class com.google.firestore.v1.BitSequence
+-keep class com.google.firestore.v1.WriteResult
+-keepclassmembers class com.rmldemo.guardsquare.uat.domain.model.Service {
+    <fields>;
+}
+-keepresourcexmlelements "manifest/application/service/meta-data@name=androidx.camera.core.impl.MetadataHolderService.DEFAULT_CONFIG_PROVIDER"
+-keepclassmembers class androidx.camera.lifecycle.LifecycleCamera {
+    <methods>;
+}
+-keepclassmembers class androidx.camera.core.Camera {
+    <methods>;
+}
+-keepclassmembers class androidx.camera.lifecycle.LifecycleCameraRepository$LifecycleCameraRepositoryObserver {
+    <methods>;
+}
+-keepclassmembers class com.rmldemo.guardsquare.uat.data.remote.TokenResponse {
+    <fields>;
+}
+-keepclassmembers class com.rmldemo.guardsquare.uat.data.remote.CheckTokenResponse {
+    <fields>;
+}
+-keepclassmembers class com.rmldemo.guardsquare.uat.data.remote.CheckTokenBody {
+    <fields>;
+}
+
+
+###################################### Crypto Tink ######################################
+-keepclassmembers class com.google.crypto.tink.proto.HmacParams {
+    *** hash_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HmacParams {
+    *** tagSize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HmacKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HmacKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HmacKeyFormat {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.KeyTemplate {
+    *** typeUrl_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.KeyTemplate {
+    *** value_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.KeyTemplate {
+    *** outputPrefixType_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCmacParams {
+    *** tagSize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCmacKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCmacKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrParams {
+    *** ivSize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrHmacAeadKeyFormat {
+    *** aesCtrKeyFormat_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrHmacAeadKeyFormat {
+    *** hmacKeyFormat_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmKeyFormat {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesEaxParams {
+    *** ivSize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesEaxKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesEaxKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmSivKeyFormat {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmSivKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.XChaCha20Poly1305KeyFormat {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EciesHkdfKemParams {
+    *** curveType_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EciesHkdfKemParams {
+    *** hkdfHashType_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EciesHkdfKemParams {
+    *** hkdfSalt_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EciesAeadDemParams {
+    *** aeadDem_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EciesAeadHkdfParams {
+    *** kemParams_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EciesAeadHkdfParams {
+    *** demParams_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EciesAeadHkdfParams {
+    *** ecPointFormat_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EciesAeadHkdfKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HpkeParams {
+    *** kem_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HpkeParams {
+    *** kdf_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HpkeParams {
+    *** aead_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HpkeKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RegistryConfig {
+    *** configName_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RegistryConfig {
+    *** entry_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EcdsaParams {
+    *** hashType_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EcdsaParams {
+    *** curve_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EcdsaParams {
+    *** encoding_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.EcdsaKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RsaSsaPkcs1Params {
+    *** hashType_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RsaSsaPkcs1KeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RsaSsaPkcs1KeyFormat {
+    *** modulusSizeInBits_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RsaSsaPkcs1KeyFormat {
+    *** publicExponent_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RsaSsaPssParams {
+    *** sigHash_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RsaSsaPssParams {
+    *** mgf1Hash_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RsaSsaPssParams {
+    *** saltLength_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RsaSsaPssKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RsaSsaPssKeyFormat {
+    *** modulusSizeInBits_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.RsaSsaPssKeyFormat {
+    *** publicExponent_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.Ed25519KeyFormat {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesSivKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesSivKeyFormat {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrHmacStreamingParams {
+    *** ciphertextSegmentSize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrHmacStreamingParams {
+    *** derivedKeySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrHmacStreamingParams {
+    *** hkdfHashType_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrHmacStreamingParams {
+    *** hmacParams_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrHmacStreamingKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrHmacStreamingKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCtrHmacStreamingKeyFormat {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmHkdfStreamingParams {
+    *** ciphertextSegmentSize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmHkdfStreamingParams {
+    *** derivedKeySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmHkdfStreamingParams {
+    *** hkdfHashType_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmHkdfStreamingKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmHkdfStreamingKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmHkdfStreamingKeyFormat {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HmacPrfParams {
+    *** hash_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HmacPrfKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HmacPrfKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HmacPrfKeyFormat {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCmacPrfKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesCmacPrfKeyFormat {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HkdfPrfParams {
+    *** hash_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HkdfPrfParams {
+    *** salt_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HkdfPrfKeyFormat {
+    *** params_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HkdfPrfKeyFormat {
+    *** keySize_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.HkdfPrfKeyFormat {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmKey {
+    *** version_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.AesGcmKey {
+    *** keyValue_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.KeyData {
+    *** typeUrl_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.KeyData {
+    *** value_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.KeyData {
+    *** keyMaterialType_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.Keyset$Key {
+    *** keyData_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.Keyset$Key {
+    *** status_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.Keyset$Key {
+    *** keyId_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.Keyset$Key {
+    *** outputPrefixType_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.Keyset {
+    *** primaryKeyId_;
+}
+-keepclassmembers class com.google.crypto.tink.proto.Keyset {
+    *** key_;
+}
+-keepclassmembers class * extends com.google.crypto.tink.shaded.protobuf.GeneratedMessageLite {
+  <fields>;
+}

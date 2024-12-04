@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "43870846720",
+    "project_id": "vdipay-b5b37",
+    "storage_bucket": "vdipay-b5b37.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43870846720:android:6ca3293ceb27166bf43de5",
+        "android_client_info": {
+          "package_name": "com.rmldemo.guardsquare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmHO_R-sH2iU2hImdazFEyl2TMzNq7NOg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43870846720:android:1d7625beea191806f43de5",
+        "android_client_info": {
+          "package_name": "com.rmldemo.guardsquare.uat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmHO_R-sH2iU2hImdazFEyl2TMzNq7NOg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
